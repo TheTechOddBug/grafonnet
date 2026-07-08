@@ -21,11 +21,14 @@ local utils = import './utils.libsonnet';
       function(acc, schema)
         local id = schema.info['x-schema-identifier'];
         local title = std.asciiLower(id);
-        acc + [{
-          title: title,
-          path: title + '.libsonnet',
-          content: root.generateLib(schema),
-        }],
+        if id == ''
+        then acc
+        else
+          acc + [{
+            title: title,
+            path: title + '.libsonnet',
+            content: root.generateLib(schema),
+          }],
       schemas,
       [],
     ),
@@ -34,6 +37,7 @@ local utils = import './utils.libsonnet';
     local id = schema.info['x-schema-identifier'];
     local title = std.asciiLower(id);
     local subSchema =
+      assert std.trace(schema.info.title, true);
       if 'spec' in schema.components.schemas[id].properties
       then schema.components.schemas[id].properties.spec
       else schema.components.schemas[id];
@@ -114,6 +118,10 @@ local utils = import './utils.libsonnet';
         a.field.new(
           a.id.new('alerting'),
           a.import_statement.new('alerting.libsonnet'),
+        ),
+        a.field.new(
+          a.id.new('apps'),
+          a.import_statement.new('apps.libsonnet'),
         ),
       ]
     ).toString(),

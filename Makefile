@@ -1,13 +1,13 @@
 .PHONY: generate regenerate localmkdocs test
 
-LATEST := v11.4.0
+LATEST := v13.0.0
 
 generate: gen/grafonnet-latest
 
 gen/grafonnet-latest:
 	./scripts/generate.sh ${LATEST} && \
 	./scripts/generate_latest.sh ${LATEST} && \
-	sed -i 's/v11\..\.0/$(LATEST)/' examples/*/output.json
+	sed -i 's/v13\..\.0/$(LATEST)/' examples/*/output.json
 
 localmkdocs:
 	python -m venv .mkdocs/.venv; \
